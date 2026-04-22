@@ -1,9 +1,15 @@
 package io.eight_onar.projectabyss;
 
 import com.mojang.logging.LogUtils;
+import io.eight_onar.projectabyss.item.Items;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,21 +27,29 @@ public class ProjectAbyss
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
+
     public ProjectAbyss(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
 
-        modEventBus.addListener(this::commonSetup);
+        Items.register(modEventBus);
+//        Blocks.register(modEventBus);
 
+        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::addCreativeTab);
         MinecraftForge.EVENT_BUS.register(this);
 
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        //da
-    }
 
+    }
+    public void addCreativeTab(BuildCreativeModeTabContentsEvent tabContentsEvent){
+        if (tabContentsEvent.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
+            tabContentsEvent.accept(Items.PUPPY);
+        }
+    }
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
