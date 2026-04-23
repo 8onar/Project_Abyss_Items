@@ -1,6 +1,7 @@
 package io.eight_onar.projectabyss;
 
 import com.mojang.logging.LogUtils;
+import io.eight_onar.projectabyss.creativetabs.CreativeTabs;
 import io.eight_onar.projectabyss.item.Items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.CreativeModeTab;
@@ -33,10 +34,9 @@ public class ProjectAbyss
         IEventBus modEventBus = context.getModEventBus();
 
         Items.register(modEventBus);
-//        Blocks.register(modEventBus);
-
+        CreativeTabs.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::addCreativeTab);
+
         MinecraftForge.EVENT_BUS.register(this);
 
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -44,11 +44,6 @@ public class ProjectAbyss
     private void commonSetup(final FMLCommonSetupEvent event)
     {
 
-    }
-    public void addCreativeTab(BuildCreativeModeTabContentsEvent tabContentsEvent){
-        if (tabContentsEvent.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
-            tabContentsEvent.accept(Items.PUPPY);
-        }
     }
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
